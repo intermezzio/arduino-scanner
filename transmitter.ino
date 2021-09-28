@@ -36,6 +36,11 @@ void setup()
   Serial.begin(baudRate);     // NOTE2: Set the baudRate to 115200 for faster communication
 }
 
+/** Trig functions
+ * Default Arduino trig functions use doubles
+ * and radians, so these wrappers
+ * allow it to work with floats and degrees
+ */
 float sind(float angle) {
   double inputAngle = (double)angle * PI / 180;
   double sinAngle = sin(inputAngle);
@@ -67,16 +72,32 @@ void loop()
 
   distance = interpretIrReading(irReading);
 
-  xPos = distance * cosd(xAngle) * cosd(yAngle-90); // left to right
-  yPos = distance * sind(xAngle) * cosd(yAngle-90); // forward or backward
-  zPos = distance * sind(yAngle-90);                // up and down
+  // MARIII
+  // right now the xAngle and yAngle assume that
+  // x=0 deg and y=90 deg is pointing straight forward
+  // x might be close to the truth but y probably isn't
+  // test this with the arduino and see if you need to adjust
+  // the values
+  xAngle = xAngle; // subtract or add some number of degrees if you find that this is off
+  yAngle = yAngle - 90; // same here, it's probably not a perfect 90 degrees off
+  xPos = distance * cosd(xAngle) * cosd(yAngle); // left to right
+  yPos = distance * sind(xAngle) * cosd(yAngle); // forward or backward
+  zPos = distance * sind(yAngle);                // up and down
 
 //  char buffer[100];
 //  sprintf(buffer, "%6f %6f %6f %6f %6f %6f", distance, xAngle, yAngle, xPos, yPos, zPos);
 //  Serial.println(buffer);
-  Serial.print("Reading:  ");
-  Serial.println(irReading);
-  Serial.print("Distance: ");
-  Serial.println(distance);
+  Serial.print(distance);
+  Serial.print(" ");
+  Serial.print(xAngle);
+  Serial.print(" ");
+  Serial.print(yAngle);
+  Serial.print(" ");
+  Serial.print(xPos);
+  Serial.print(" ");
+  Serial.print(yPos);
+  Serial.print(" ");
+  Serial.print(zPos);
+  Serial.println();
   
 }
