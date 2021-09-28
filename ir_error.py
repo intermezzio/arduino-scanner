@@ -8,7 +8,7 @@ ir_func = lambda x: IR_ERROR/x
 ir_data = pd.read_csv("ir_error.csv")
 fig, ax = plt.subplots()
 
-ax.plot(ir_data["actual"], ir_data["expected"],
+ax.plot(ir_data["expected"], ir_data["actual"],
 	"r.", label="observed data")
 
 input_values = np.linspace(30,60,300)
