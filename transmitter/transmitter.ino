@@ -108,7 +108,8 @@ void loop()
     delay(1000);
   }
 
-  yServo.write(yStart+=5);
+  yStart=yStart+5;
+  yServo.write(yStart);
   if(yStart > 180){
     yStart=90;
   }

@@ -12,7 +12,7 @@ with open("points.csv", "w") as outfile:
 
 with open("points.csv", "a") as outfile:
 	while True:
-		data = serialPort.readline().decode():
+		data = serialPort.readline().decode()
 
 		if len(data):
 			distance, x_angle, y_angle, x_pos, y_pos, z_pos = [float(x) for x in data.split()]
