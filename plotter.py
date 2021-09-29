@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import time
 
@@ -16,22 +17,27 @@ while True:
 fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 
-ax.plot_trisurf(data["x"], data["y"], data["z"])
+scat = ax.scatter(data["x"], data["y"], data["z"])
+# surf = ax.plot_trisurf(data["x"], data["y"], data["z"])
 
-plt.show() # remove ???
+plt.ion()
+plt.show()
 
-'''
 while True:
 	data = pd.read_csv("points.csv")
-	if num_points < data.shape[0]:
+	print(data.shape)
+	if True or num_points < data.shape[0]:
 		num_points = data.shape[0]
 
 		# replot points
-		ax.set_xdata(data["x"]) ???
-		??? y, z ???
-
+		# surf.set_verts(list(zip(data["x"], data["y"], data["z"])))
+		# scat.set_offsets(list(zip(data["x"], data["y"], data["z"])))
+		# scat.set_3d_properties(np.c_[data["x"],data["y"]],data["z"].to_numpy())
+		ax.clear()
+		scat = ax.scatter(data["x"], data["y"], data["z"])
+		plt.pause(1)
 		# redraw surface
-		ax.draw() ????
+		fig.canvas.draw()
 
-'''
-
+	time.sleep(1)
+	
