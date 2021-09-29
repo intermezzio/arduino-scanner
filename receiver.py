@@ -1,8 +1,8 @@
 import serial
 
-arduino_com_port = "COM6"
+arduino_com_port = "/dev/ttyACM0"
 
-baud_rate = 9600
+baud_rate = 115200
 
 serial_port = serial.Serial(arduino_com_port, baud_rate, timeout=1)
 
