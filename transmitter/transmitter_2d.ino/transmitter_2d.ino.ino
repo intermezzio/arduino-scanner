@@ -11,11 +11,11 @@ Servo xServo;
 Servo yServo;
 
 float irReading = 0;
-float theta = 0;
-float phi = 0;
+float xAngle = 0;
+float yAngle = 0;
 float distance = 0;
-float thetaStart = 50;
-float phiStart = 130;
+float xStart = 60;
+float yStart = 90;
 
 float xPos = 0;
 float yPos = 0;
@@ -37,8 +37,8 @@ void setup()
   yServo.attach(yServoPort);
   pinMode(irPort, INPUT);
 
-  xServo.write(thetaStart);
-  yServo.write(phiStart);
+  xServo.write(xStart);
+  yServo.write(yStart);
   
   long baudRate = 9600;     // NOTE1: The baudRate for sending & receiving programs must match
   Serial.begin(baudRate);     // NOTE2: Set the baudRate to 115200 for faster communication
@@ -77,27 +77,27 @@ void loop()
 //  sprintf(buffer, "%6f %6f %6f %6f %6f %6f", distance, xAngle, yAngle, xPos, yPos, zPos);
 //  Serial.println(buffer);
   
-  for(int i=50; i<= 130; i+=5){
-    xServo.write(i);
+  for(int i=90; i<= 180; i+=5){
+    yServo.write(i);
     
-    theta = xServo.read();
-    phi = yServo.read();
+    xAngle = xServo.read();
+    yAngle = yServo.read();
     
     irReading = analogRead(irPort);
 
     distance = interpretIrReading(irReading);
 
-    theta = (theta-90)*PI/180; // subtract or add some number of degrees if you find that this is off
-    phi = (180 - (phi-50))*PI/180; // same here, it's probably not a perfect 90 degrees off
-    xPos = (disorigin + distance * cosd(PI/2 - phi) - armlength * cosd(phi)) * sind(theta); // left to right
-    yPos = (disorigin + distance * cosd(PI/2 - phi) - armlength * cosd(phi)) * cosd(theta); // forward or backward
-    zPos = height + armlength * sind(phi) + distance * sind(PI/2 - phi);   // up and down
+    xAngle = xAngle-50; // subtract or add some number of degrees if you find that this is off
+    yAngle = yAngle-90; // same here, it's probably not a perfect 90 degrees off
+    xPos = (disorigin + distance * cosd(PI/2 - xAngle) - armlength * cosd(xAngle)) * sind(yAngle); // left to right
+    yPos = (disorigin + distance * cosd(PI/2 - xAngle) - armlength * cosd(xAngle)) * cosd(yAngle); // forward or backward
+    zPos = height + armlength * sind(xAngle) + distance * sind(PI/2 - xAngle);   // up and down
 
     Serial.print(distance);
     Serial.print(" ");
-    Serial.print(theta);
+    Serial.print(xAngle);
     Serial.print(" ");
-    Serial.print(phi);
+    Serial.print(yAngle);
     Serial.print(" ");
     Serial.print(xPos);
     Serial.print(" ");
@@ -105,13 +105,7 @@ void loop()
     Serial.print(" ");
     Serial.print(zPos);
     Serial.println();
-    delay(500);
-  }
-
-  phiStart=phiStart+2;
-  yServo.write(phiStart);
-  if(phiStart > 180){
-    phiStart=130;
+    delay(1000);
   }
   
 }
