@@ -6,11 +6,13 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import seaborn as sns
 
+PREFIX = "3d" # can be "2d", "3d", or ""
+
 # simple styling
 sns.set(style="whitegrid")
 
 # read data
-data = pd.read_csv("points.csv")
+data = pd.read_csv(PREFIX + "points.csv")
 num_points = 0
 
 # wait until at least one point has been sent
@@ -39,10 +41,11 @@ ax.set_title("IR Scan Data")
 # set interactive plot for live data
 plt.ion()
 plt.show()
+fig.savefig(PREFIX + "graph.png")
 
 while True:
 	# check for points every second
-	data = pd.read_csv("points.csv")
+	data = pd.read_csv(PREFIX + "points.csv")
 	
 	# if there are more points than before
 	if num_points != data.shape[0]:
@@ -50,7 +53,8 @@ while True:
 
 		# replot points
 		ax.clear()
-		scat = ax.scatter(data["x"], data["y"], data["z"], facecolors=cm.coolwarm_r(data["y"]/data["y"].max()))
+		scat = ax.scatter(data["x"], data["y"], data["z"],
+			facecolors=cm.coolwarm_r(data["y"]/data["y"].max()))
 
 		ax.set_xlabel("x distance (cm)")
 		ax.set_ylabel("y distance (cm)")
@@ -59,8 +63,8 @@ while True:
 		ax.set_title("IR Scan Data")
 		
 		plt.pause(1)
-		# redraw surface
 		fig.canvas.draw()
+		fig.savefig(PREFIX + "graph.png")
 
 	time.sleep(1)
 

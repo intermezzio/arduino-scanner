@@ -3,23 +3,22 @@ import csv
 import time
 
 # set ports and other constants for collecting data
-arduino_com_port = "/dev/cu.usbmodem143101"
-
-baud_rate = 9600
-
-serial_port = serial.Serial(arduino_com_port, baud_rate, timeout=1)
+ARDUINO_COM_PORT = "/dev/cu.usbmodem143101"
+BAUD_RATE = 9600
+SERIAL_PORT = serial.Serial(ARDUINO_COM_PORT, BAUD_RATE, timeout=1)
+PREFIX = "3d" # can be "2d", "3d", or ""
 
 # clear existing points.csv file
-with open("points.csv", "w") as outfile:
+with open(PREFIX + "points.csv", "w") as outfile:
 	outfile.write("x,y,z\n")
 
 while True:
 	# every second check for serial data
 	time.sleep(1)
-	data = serial_port.readline().decode()
+	data = SERIAL_PORT.readline().decode()
 
 	# check how many points are already recorded
-	file = open("points.csv")
+	file = open(PREFIX + "points.csv")
 	reader = csv.reader(file)
 	lines= len(list(reader))
 
